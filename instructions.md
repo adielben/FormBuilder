@@ -16,8 +16,12 @@ I've used the flask web framework in python.
 # RUN with cmd:
 - cd FormBuilder
 - CMD: 
-> set FLASK_APP=app
+```
+set FLASK_APP=app
+```
 OR
 - powerShell: 
-> $env:FLASK_APP = "app"
+```
+$env:FLASK_APP = "app"
+```
 > python -m flask run
