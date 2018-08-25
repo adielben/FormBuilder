@@ -1,6 +1,7 @@
 # Background:
 I've used the flask web framework in python.
-# INSTALL:
+# INSTALL (windows):
+- pip install flask
 - Anaconda3 library
 - pip install flask-sqlalchemy
 - pip install flask-socketio
