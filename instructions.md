@@ -18,10 +18,11 @@ I've used the flask web framework in python.
 - CMD: 
 ```
 set FLASK_APP=app
+python -m flask run
 ```
 OR
 - powerShell: 
 ```
 $env:FLASK_APP = "app"
+python -m flask run
 ```
-> python -m flask run
