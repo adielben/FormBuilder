@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Form List</title>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+    <script type="text/javascript">
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+        socket.on('disconnect', function() {
+            socket.emit('disconnect_client', {data: 'I\'m disconnected!',room: location.pathname.substring(1)});
+        });
+
+        socket.on('connect', function() {
+            socket.emit('form list', {data: 'I\'m connected!'});
+        });
+
+        socket.on('new form', function(form){
+            var table = document.getElementById("form_list");
+            var row = table.insertRow(1);
+            var id = row.insertCell(0);
+            var name = row.insertCell(1);
+            var submissions = row.insertCell(2);
+            var submit_page = row.insertCell(3);
+            var submission_page = row.insertCell(4);
+            id.innerHTML = form["id"];
+            name.innerHTML = form["name"];
+            submissions.innerHTML = form["submissions"];
+            submit_page.innerHTML = "<a href='/submit/"+form["id"]+"'>View</a>";
+            submission_page.innerHTML = "<a href='/submissions/"+form["id"]+"'>View</a>";
+        });
+    </script>
+
+<link rel="stylesheet" href="/style/info_table.css">
+</head>
+<body>
+<table id="info_table">
+    <tr>
+        <th>Form Id</th>
+        <th>Form Name</th>
+        <th># Submissions</th>
+        <th>Submit Page</th>
+        <th>Submissions Page</th>
+    </tr>
+    {% for row in rows %}
+    <tr>
+      <td>{{ row['id'] }}</td>
+      <td>{{ row['name'] }}</td>
+    <td>{{ row['submissions'] }}</td>
+    <td><a href="/submit/{{ row['id'] }}">View</a></td>
+    <td><a href="/submissions/{{ row['id'] }}">View</a></td>
+    </tr>
+    {% endfor %}
+
+
+
+</table>
+</body>
+</html>
