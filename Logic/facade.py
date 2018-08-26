@@ -33,6 +33,8 @@ def get_all_forms():
 
 def get_all_submissions(form_id):
     form = Form.query.filter_by(id=form_id).first()
+    if form is None:
+        return None
     fields = form.fields
     users = list(map(lambda submission : submission.user_id, fields[0].submissions))
     ans = []# [{user,fieldName1: input1, fieldName2:input2,...},...]
@@ -53,6 +55,8 @@ def get_all_submissions(form_id):
 
 def get_all_fields(form_id):
     form = Form.query.filter_by(id=form_id).first()
+    if form is None:
+        return None
     fields = form.fields
     return list(map(lambda field: {"id":field.id,"name": field.name,"label":field.label,"type":field.type},fields))\
 
@@ -68,12 +72,16 @@ def generate_new_user_id():
 def add_new_submission_to_form(submission, form_id):#{field_id:input,...}
     user = generate_new_user_id()
     for key, value in submission.items():
+        if len(value) > 50:
+            return "The input length must be up to 50"
+    for key, value in submission.items():
         new_submission = Submission(user_id=user, field_id=key, input=value)
         db.session.add(new_submission)
         db.session.commit()
     form = Form.query.filter_by(id=form_id).first()
     form.submissions += 1
     db.session.commit()
+    return "The submission is added successfully"
 
 
 def get_form_name(form_id):

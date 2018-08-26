@@ -36,13 +36,18 @@ def css(file):
 @app.route('/submissions/<form_id>')
 def submissions(form_id):
     from Logic.facade import get_all_submissions,get_form_name
-    return render_template('form_submissions.html', rows=get_all_submissions(form_id),form_name=get_form_name(form_id))
+    rows = get_all_submissions(form_id)
+    if rows is None:
+        return render_template('form_submissions.html',form_name="Unknown form")
+    return render_template('form_submissions.html', rows=rows,form_name=get_form_name(form_id))
 
 
 @app.route('/submit/<form_id>', methods=['GET', 'POST'])
 def submit(form_id):
     from Logic.facade import get_all_fields,add_new_submission_to_form,get_form_name
     all_fields = get_all_fields(form_id)
+    if all_fields is None:
+        return render_template('form_submit.html', message="Unknown form")
     if request.method == 'POST':
         submission = {}
         for field in all_fields:
@@ -50,10 +55,10 @@ def submit(form_id):
             field_name = field["name"]
             field_id = field["id"]
             submission[str(field_id)] = request.form[str(field_name)]
-        add_new_submission_to_form(submission,form_id)
-        return redirect("/submissions/"+str(form_id))
+        res = add_new_submission_to_form(submission,form_id)
+        return render_template('form_submit.html', rows=all_fields, form_name=get_form_name(form_id), message=res)
     else:
-        return render_template('form_submit.html', rows=all_fields,form_name=get_form_name(form_id))
+        return render_template('form_submit.html', rows=all_fields,form_name=get_form_name(form_id),message="")
 
 
 @socketio.on('connect')
