@@ -2,7 +2,6 @@
 I've used the flask web framework in python.
 # INSTALL (windows):
 - pip install flask
-- Anaconda3 library
 - pip install flask-sqlalchemy
 - pip install flask-socketio
 - pip install Flask-Migrate
@@ -31,3 +30,6 @@ Forms List Page - http://localhost:5000/
 Form Builder Page - http://localhost:5000/formBuilder
 Form Submit Page - http://localhost:5000/submit/<id>
 Form Submissions Page - http://localhost:5000/submission/<id>
+ 
+ # RUN with pycharm:
+ Just click play on app.py
